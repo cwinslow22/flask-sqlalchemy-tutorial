@@ -1,7 +1,7 @@
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
-from .models import db_session, Department as DepartmentModel, Employee as EmployeeModel
+from models import db_session, Department as DepartmentModel, Employee as EmployeeModel
 
 
 class Department(SQLAlchemyObjectType):
@@ -19,8 +19,8 @@ class Employee(SQLAlchemyObjectType):
 class Query(graphene.ObjectType):
     node = relay.Node.Field()
     # Allows sorting over multiple columns, by default over the primary key
-    all_employees = SQLAlchemyConnectionField(Employee.connection)
+    all_employees = SQLAlchemyConnectionField(Employee._meta.connection)
     # Disable sorting over this field
-    all_departments = SQLAlchemyConnectionField(Department.connection, sort=None)
+    all_departments = SQLAlchemyConnectionField(Department._meta.connection, sort=None)
 
 schema = graphene.Schema(query=Query)
